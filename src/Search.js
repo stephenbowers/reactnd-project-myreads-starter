@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import escapeRegExp from 'escape-string-regexp'
-// import Title from './Title'
 import './Search.css'
 
 class Search extends Component {
@@ -10,20 +9,17 @@ class Search extends Component {
     }
 
     updateQuery = (query) => {
-        /* this.setState({ query: query.trim() }) */
-        this.setState({ query })
+        this.setState({ query: query })
     }
 
     render() {
-        const { books } = this.props
         const { query } = this.state
 
         let showingBooks
         if (query) {
             const match = new RegExp(escapeRegExp(query), 'i')
             // TODO: Make search work for author
-            showingBooks = books.filter((book) => match.test(book.title || book.subtitle))
-            console.log(books)
+            showingBooks = this.props.books.filter((book) => match.test(book.title || book.subtitle))
         } else {
             showingBooks = ''
         }
