@@ -6,7 +6,7 @@ class Book extends Component {
         return( 
                 <div className="book">
                     <div className="book-top">
-                        {this.props.book.imageLinks.smallThumbnail ? (
+                        {this.props.book.imageLinks ? (
                             <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: 
                                 `url('${this.props.book.imageLinks.smallThumbnail}')` }}></div>
                         ) : (
@@ -16,6 +16,7 @@ class Book extends Component {
                             
                         <ShelfControl
                             book={this.props.book}
+                            currentShelf={this.props.currentShelf}
                             changeShelf={this.props.changeShelf}
                         />
                     </div>

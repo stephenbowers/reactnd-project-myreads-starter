@@ -1,82 +1,56 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import escapeRegExp from 'escape-string-regexp'
-import './Search.css'
+import * as BooksAPI from './BooksAPI'
+import Book from './Book'
 
 class Search extends Component {
     state = {
-        query: ''
+        query: '',
+        searchResults: []
     }
 
     updateQuery = (query) => {
         this.setState({ query: query })
+        this.getSearchResults(query)
     }
 
+   getSearchResults = (query) => {
+    if (this.state.query && query !== '') {
+        BooksAPI.search(query).then(searchResults => {
+            this.setState({ searchResults: searchResults })
+        })
+    } else {
+        this.setState({ searchResults: [] })
+    }
+   }
+
     render() {
-        const { query } = this.state
-
-        let showingBooks
-        if (query) {
-            const match = new RegExp(escapeRegExp(query), 'i')
-            // TODO: Make search work for author
-            showingBooks = this.props.books.filter((book) => match.test(book.title || book.subtitle))
-        } else {
-            showingBooks = ''
-        }
-
         return (
-            <div className='search-container'>
-                {/*<Title />*/}
+            <div className="search-container">
                 <div className="search-books">
                     <div className="search-books-bar">
                         <Link className='close-search' to='/'>Close</Link>
                         <div className="search-books-input-wrapper">
-                        {/*
-                            NOTES: The search from BooksAPI is limited to a particular set of search terms.
-                            You can find these search terms here:
-                            https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-
-                            However, remember that the BooksAPI.search method DOES search by title or author. So, don't     worry if
-                            you don't find a specific author or title. Every search is limited by search terms.
-                        */}
                         <input
                             type="text"
                             placeholder="Search by title or author"
-                            value={query}
+                            value={this.state.query}
                             onChange={(event) => this.updateQuery(event.target.value)}
                             />
                         </div>
                     </div>
                 <div className="search-books-results">
-                        <span>Found {showingBooks.length} result{showingBooks.length !== 1 && 's'}.</span>
+
+                        <span>{this.state.searchResults.length} result{this.state.searchResults.length !== 1 && 's'} shown.</span>
                     <ol className="books-grid">
-                        {showingBooks.length > 0 &&
-                            showingBooks.map((book) => (
-                            <li key={book.id}>
-                                <div className="book">
-                                    <div className="book-top">
-                                    <div className="book-cover" style={{ width: 128, height: 193, 
-                                        backgroundImage: `url(${book.imageLinks.smallThumbnail})`}}></div>
-                                        <div className="book-shelf-changer">
-                                            <select>
-                                                <option value="move" disabled>Move to...</option>
-                                                <option value="currentlyReading">Currently Reading</option>
-                                                <option value="wantToRead">Want to Read</option>
-                                                <option value="read">Read</option>
-                                                <option value="none">None</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div className="book-title">
-                                    {book.title}
-                                    {book.subtitle &&
-                                    `: ${book.subtitle}`
-                                    }
-                                    </div>
-                                    {book.authors &&
-                                    <div className="book-authors">{book.authors}</div>
-                                    }
-                                </div>
+                        {this.state.searchResults.length > 0 &&
+                            this.state.searchResults.map((searchResult) => (
+                            <li key={searchResult.id}>
+                                    <Book 
+                                        book={searchResult}
+                                        currentShelf='none'
+                                        changeShelf={this.props.changeShelf}
+                                    />
                             </li>
                         ))}
                     </ol>
