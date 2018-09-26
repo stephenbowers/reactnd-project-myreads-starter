@@ -48,7 +48,6 @@ class Search extends Component {
                             <li key={searchResult.id}>
                                     <Book 
                                         book={searchResult}
-                                        currentShelf='none'
                                         changeShelf={this.props.changeShelf}
                                     />
                             </li>
