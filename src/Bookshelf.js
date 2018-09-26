@@ -2,84 +2,82 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import Title from './Title'
 import Book from './Book'
-class Bookshelf extends Component {
 
-    render() {
-      return (
-        <div className='list-books'>
-          <Title />
-          <div className='list-books-content'>
-            <div>
-            <div className="bookshelf">
-            <h2 className="bookshelf-title">Currently Reading</h2>
-            <div className="bookshelf-books">
-              <ol className="books-grid">
-                {
-                  this.props.books
-                    .filter(book => book.shelf === 'currentlyReading')
-                    .map(book => (
-                        <li key={book.id}>
-                          <Book
-                            book={book}
-                            currentShelf='currentlyReading'
-                            changeShelf={this.props.changeShelf}
-                          />
-                        </li>
-                      ))
-                }
-              </ol>
-            </div>
-          </div>
-          <div className="bookshelf">
-            <h2 className="bookshelf-title">Want to Read</h2>
-            <div className="bookshelf-books">
-              <ol className="books-grid">
-                {
-                  this.props.books
-                    .filter(book => book.shelf === 'wantToRead')
-                    .map(book => (
-                        <li key={book.id}>
-                          <Book
-                            book={book}
-                            currentShelf='wantToRead'
-                            changeShelf={this.props.changeShelf}
-                          />
-                        </li>
-                      ))
-                  }
-              </ol>
-            </div>
-          </div>
-          <div className="bookshelf">
-            <h2 className="bookshelf-title">Read</h2>
-            <div className="bookshelf-books">
-              <ol className="books-grid">
-              {
-                this.props.books
-                  .filter(book => book.shelf === 'read')
-                  .map(book => (
-                      <li key={book.id}>
-                        <Book
-                          book={book}
-                          currentShelf='read'
-                          changeShelf={this.props.changeShelf}
-                        />
-                      </li>
-                    ))
-                }
-              </ol>
-            </div>
-          </div>
-            </div>
-          </div>
-          <div className="open-search">
-            <Link
-              to='/search'
-            >Add a book</Link>
-          </div>
+const Bookshelf = (props) => {
+  return (
+    <div className='list-books'>
+      <Title />
+      <div className='list-books-content'>
+        <div>
+        <div className="bookshelf">
+        <h2 className="bookshelf-title">Currently Reading</h2>
+        <div className="bookshelf-books">
+          <ol className="books-grid">
+            {
+              props.books
+                .filter(book => book.shelf === 'currentlyReading')
+                .map(book => (
+                    <li key={book.id}>
+                      <Book
+                        book={book}
+                        currentShelf='currentlyReading'
+                        changeShelf={props.changeShelf}
+                      />
+                    </li>
+                  ))
+            }
+          </ol>
         </div>
-        )
-    }
+      </div>
+      <div className="bookshelf">
+        <h2 className="bookshelf-title">Want to Read</h2>
+        <div className="bookshelf-books">
+          <ol className="books-grid">
+            {
+              props.books
+                .filter(book => book.shelf === 'wantToRead')
+                .map(book => (
+                    <li key={book.id}>
+                      <Book
+                        book={book}
+                        currentShelf='wantToRead'
+                        changeShelf={props.changeShelf}
+                      />
+                    </li>
+                  ))
+              }
+          </ol>
+        </div>
+      </div>
+      <div className="bookshelf">
+        <h2 className="bookshelf-title">Read</h2>
+        <div className="bookshelf-books">
+          <ol className="books-grid">
+          {
+            props.books
+              .filter(book => book.shelf === 'read')
+              .map(book => (
+                  <li key={book.id}>
+                    <Book
+                      book={book}
+                      currentShelf='read'
+                      changeShelf={props.changeShelf}
+                    />
+                  </li>
+                ))
+            }
+          </ol>
+        </div>
+      </div>
+        </div>
+      </div>
+      <div className="open-search">
+        <Link
+          to='/search'
+        >Add a book</Link>
+      </div>
+    </div>
+  )
 }
 
 export default Bookshelf
