@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import * as BooksAPI from './BooksAPI'
 import Book from './Book'
+import intersectionBy from 'lodash.intersectionby'
+import uniqBy from 'lodash.uniqby'
 
 class Search extends Component {
     state = {
@@ -17,7 +19,10 @@ class Search extends Component {
    getSearchResults = (query) => {
     if (this.state.query && query !== '') {
         BooksAPI.search(query).then(searchResults => {
-            this.setState({ searchResults: searchResults })
+            if (searchResults.error) return
+            const duplicateBooks = intersectionBy(this.props.books, searchResults, 'id')
+            const updatedResults = uniqBy(duplicateBooks.concat(searchResults), 'id')
+            this.setState({ searchResults: updatedResults })
         })
     } else {
         this.setState({ searchResults: [] })
